@@ -7,19 +7,23 @@ import palago from './palago.png';
 class Truchet extends Component {
   constructor() {
     super();
-    this.state = { autoUpdate: false };
+    this.state = {
+      clickRotation: true,
+      mouseOverRotation: true,
+      autoRotation: false
+    };
     this.interval = null;
   }
 
   componentDidUpdate() {
-    if (!this.interval && this.state.autoUpdate) {
+    if (!this.interval && this.state.autoRotation) {
       this.interval = setInterval(() => {
         const { hexes, rotate } = this.props;
         const { x, y } = hexes[Math.floor(Math.random() * (hexes.length - 1))]
         this.props.rotate(x, y)
       }, 100);
     }
-    if (this.interval && !this.state.autoUpdate) {
+    if (this.interval && !this.state.autoRotation) {
       clearInterval(this.interval);
       this.interval = null;
     }
@@ -31,14 +35,18 @@ class Truchet extends Component {
   }
 
   render() {
-    const { hexes, rotate, toggleAutoUpdate } = this.props;
+    const { hexes, rotate } = this.props;
     return (
       <div>
         <div>
-          <label>auto Update</label>
-          <input type="checkbox" value={this.state.autoUpdate} onClick={() => this.setState({ autoUpdate: !this.state.autoUpdate })}/>
+          <label>Click Rotation</label>
+          <input type="checkbox" checked={this.state.clickRotation} onChange={() => this.setState({ clickRotation: !this.state.clickRotation })}/>
+          <label>Mouse Over Rotation</label>
+          <input type="checkbox" checked={this.state.mouseOverRotation} onChange={() => this.setState({ mouseOverRotation: !this.state.mouseOverRotation })}/>
+          <label>Auto Rotation</label>
+          <input type="checkbox" checked={this.state.autoRotation} onChange={() => this.setState({ autoRotation: !this.state.autoRotation })}/>
         </div>
-        <svg width="1500" height="1000">
+        <svg width="1500" height="880">
           <defs>
             <pattern id="truchet" width="100%" height="100%">
               <image xlinkHref={truchet} x="0" y="0" height={hexes[0].size * 2}/>
@@ -57,7 +65,8 @@ class Truchet extends Component {
                   stroke="white"
                   strokeWidth="0"
                   transform={`rotate(${direction * 120} ${hexProps.x} ${hexProps.y})`}
-                  onMouseEnter={() => rotate(x, y)}
+                  onClick={() => this.state.clickRotation && rotate(x, y)}
+                  onMouseEnter={() => this.state.mouseOverRotation && rotate(x, y)}
                   {...hexProps}
                 />
               );
