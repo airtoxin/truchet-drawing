@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
+import truchet from './truchetReducer';
 
 export default combineReducers({
-  app(state = 'test', action) {
-    return state;
-  },
+  truchet,
 });

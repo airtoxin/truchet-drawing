@@ -18,6 +18,7 @@ const conf = {
   module: {
     rules: [
       { test: /\.js$/, include: [path.resolve(__dirname, 'src')], loader: 'babel-loader' },
+      { test: /\.png$/, include: [path.resolve(__dirname, 'src')], loader: 'file-loader' },
     ],
   },
   plugins: [
